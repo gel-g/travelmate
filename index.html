@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TRAVELMATE</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #eaf6ff;      
+         padding: 20px;
+    }
+
+  h1 {
+    color: #0077b6;
+    font-size: 36px;
+    margin-bottom: 5px;
+}
+.subtitle {
+    color: #555;
+    font-size: 18px;
+    margin-top: 0;
+}
+   
+   label, input, select, button {
+        margin-bottom: 10px;
+    }
+
+   input, select {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    font-size: 15px;
+    box-sizing: border-box;
+
+    }
+   button {
+    background-color: #0077b6;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button: last-of-type {
+    background-color: #777;
+    margin-left: 10px;
+}
+#result {
+    background-color: white;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 450px;
+    text-align: left;
+
+}
+#destinationInfo {
+    color: #555;
+    font-size: 14px;
+    margin-top: 8px;
+    margin-bottom: 15px;
+}
+.planner-card {
+    background-color: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    max-width: 500px;
+    margin: 20px auto;
+}
+@media (max-width: 600px) {
+    .planner-card {
+        width: 95%;
+        padding: 15px;
+    }
+
+    #result {
+        width: 95%;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+
+    button {
+        width: 90%;
+        margin: 5px 0;
+}
+</style>
+
+
+</head>
+
+<body>
+
+    <h1>✈️ TRAVELMATE</h1>
+    <p class="subtitle">🌴 Your Bohol Travel Planner 🌴</p>
+    
+    <div class="planner-card">
+    <label>Where do you want to go?</label>
+<br>
+<select id="destination" onchange="updateActivities()">
+    <option value="">Choose a destination</option>
+    <option>Panglao</option>
+    <option>Loboc</option>
+    <option>Anda</option>
+    <option>Carmen</option>
+    <option>Tagbilaran City</option>
+    <option>Talibon</option>
+    <option>Jagna</option>
+    <option>Catigbian</option>
+</select>
+<p id="destinationInfo"></p>
+<br><br>
+
+<label>Number of travelers:</label>
+<br>
+<input type="number" id="travelers" placeholder="Enter number">
+ 
+<br><br>
+
+<label>Number of days:</label>
+<br>
+<input type="number" id="days" placeholder="Enter number of days">
+ 
+<br><br>
+
+<label>Transportation:</label>
+<br>
+
+<select id="transportation">
+    <option value="Bus">🚌 Bus — ₱900/person good for 3 days</option>
+    <option value="Van">🚐 Van — ₱1500/person good for 3 days</option>
+    <option value="Ferry">⛴️ Ferry — ₱2700/person good for 3 days</option>
+</select>
+ 
+ <br><br>
+
+<label>Accommodation:</label>
+<br>
+
+<select id="accommodation">
+    <option value="Budget Room">🛏️ Budget Room — ₱800/day</option>
+    <option value="Standard Room">🏨 Standard Room — ₱1,500/day</option>
+    <option value="Family Room">🏨 Family Room — ₱2,500/day</option>
+</select>
+
+<br><br>
+
+<br><br>
+
+<label>Budget:</label>
+<br>
+
+<input type="number" id="budget" placeholder="Enter your budget">
+<br><br>
+
+<label>Activities:</label>
+<br>
+
+<select id="activity">
+    <option value="0">No activity</option>
+    <option value="500">🏖️ Beach / Island Hopping — ₱500/person</option>
+    <option value="400">🐒 Tarsier Viewing — ₱400/person</option>
+    <option value="600">⛰️ Chocolate Hills Tour — ₱600/person</option>
+    <option value="700">🌊 Loboc River Cruise — ₱700/person</option>
+</select>
+
+<button type="button" onclick="createPlan()">Create My Travel Plan</button>
+<button type="button" onclick="resetPlan()">🔄 Plan Another Trip</button>
+
+</div>
+<p id="result"></p>
+
+<script>
+function createPlan() {
+
+    let destination =
+        document.getElementById("destination").value;
+
+    let travelers =
+        document.getElementById("travelers").value;
+
+    let days =
+        document.getElementById("days").value;
+
+    let transportation =
+        document.getElementById("transportation").value;
+
+    let accommodation =
+        document.getElementById("accommodation").value;
+    let budget =
+    document.getElementById("budget").value;
+ 
+     if (destination === "" || travelers <= 0 || days <= 0 || budget <= 0) {
+    document.getElementById("result").innerHTML =
+        "⚠️ Please complete all fields correctly.";
+    return;
+}
+    
+    
+let transportCost;
+
+if (transportation === "Bus") {
+    transportCost = travelers * 900;
+} else if (transportation === "Van") {
+    transportCost = travelers * 1500;
+} else {
+    transportCost = travelers * 2700;
+}
+
+let roomCost;
+
+if (accommodation === "Budget Room") {
+    roomCost = days * 800;
+} else if (accommodation === "Standard Room") {
+    roomCost = days * 1500;
+} else {
+    roomCost = days * 2500;
+}
+
+let activityCost = Number(document.getElementById("activity").value) * travelers;
+
+let totalCost = transportCost + roomCost + activityCost;
+let dailyCost = totalCost / days;
+
+let remaining = budget - totalCost;
+
+let message;
+
+let tip;
+
+if (destination === "Panglao") {
+    tip = "🏖️ Tip: Enjoy the beaches and island-hopping!";
+} else if (destination === "Loboc") {
+    tip = "🌳 Tip: Try the Loboc River cruise!";
+} else if (destination === "Carmen") {
+    tip = "⛰️ Tip: Visit the famous Chocolate Hills!";
+} else if (destination === "Anda") {
+    tip = "🌊 Tip: Explore Anda's beautiful beaches!";
+} else {
+    tip = "🌴 Tip: Enjoy exploring Bohol!";
+}
+
+if (remaining >= 0) {
+    message = "🟢 Your trip is within budget!";
+} else {
+    message = "🔴 Your budget may not be enough.";
+}
+
+    document.getElementById("result").innerHTML =
+        "Your Travel Plan<br><br>" +
+        "📍 Destination: " + destination + "<br>" +
+        "👥 Travelers: " + travelers + "<br>" +
+        "📅 Days: " + days + "<br>" +
+        "🚌 Transportation: " + transportation + "<br>" +
+       "🏨 Accommodation: " + accommodation + "<br>" +
+"💰 Budget: ₱" + budget + "<br>" +
+"🚌 Transportation Cost: ₱" + transportCost + "<br>" +
+"🏨 Accommodation Cost: ₱" + roomCost + "<br>" +
+"🏝️ Activity Cost: ₱" + activityCost + "<br>" +
+"💵 Estimated Total Cost: ₱" + totalCost + "<br>" +
+"📅 Estimated Cost Per Day: ₱" + dailyCost.toFixed(2) + "<br>" +
+"💰 Remaining Budget: ₱" + remaining + "<br>" +
+message + "<br>" +
+tip;
+}
+function resetPlan() {
+    document.getElementById("destination").value = "";
+    document.getElementById("travelers").value = "";
+    document.getElementById("days").value = "";
+    document.getElementById("transportation").value = "Bus";
+    document.getElementById("accommodation").value = "Budget Room";
+    document.getElementById("budget").value = "";
+    document.getElementById("activity").value = "0";
+    document.getElementById("result").innerHTML = "";
+}
+function updateActivities() {
+
+    let destination =
+        document.getElementById("destination").value;
+
+    let activity =
+        document.getElementById("activity");
+   let info =
+    document.getElementById("destinationInfo");
+
+    activity.innerHTML = "";
+    info.innerHTML = "";
+
+    if (destination === "Panglao") {
+    
+   info.innerHTML = "🏝️ Panglao is known for its beaches and island-hopping activities.";
+
+        activity.innerHTML =
+            '<option value="0">No activity</option>' +
+            '<option value="500">🏖️ Beach / Island Hopping — ₱500/person</option>';
+
+    } else if (destination === "Carmen") {
+
+        activity.innerHTML =
+            '<option value="0">No activity</option>' +
+            '<option value="600">⛰️ Chocolate Hills Tour — ₱600/person</option>';
+
+    } else if (destination === "Loboc") {
+
+        activity.innerHTML =
+            '<option value="0">No activity</option>' +
+            '<option value="700">🌊 Loboc River Cruise — ₱700/person</option>';
+
+    } else if (destination === "Anda") {
+
+        activity.innerHTML =
+            '<option value="0">No activity</option>' +
+            '<option value="500">🏖️ Beach Activity — ₱500/person</option>';
+
+    } else {
+
+        activity.innerHTML =
+            '<option value="0">No activity</option>' +
+            '<option value="400">🐒 Tarsier Viewing — ₱400/person</option>';
+    }
+}
+</script>
+
+</body>
+</html>
